@@ -15,6 +15,7 @@ document.getElementById("save").addEventListener("click", save);
 document.getElementById("exit").addEventListener("click", exit);
 document.getElementById("exitsave").addEventListener("click", exitsave);
 document.getElementById("external-submit").addEventListener("click", externalConfigs)
+document.getElementById("external-reload").addEventListener("click", reloadUrl)
 
 async function getConfig() {
     let currentConfig;
@@ -26,10 +27,14 @@ async function getConfig() {
         currentConfig = configjson;
     }
     else currentConfig = storageconfig;
-    console.log(currentConfig);
-
     document.getElementById("shownotabilities").checked = currentConfig.showNotabilities;
     currentStatConfig = currentConfig.stats;
+
+
+    if (currentConfig.url) {
+        document.getElementById("external-url").value = currentConfig.url;
+    }
+
 }
 
 async function showStatsConfig() {
@@ -138,10 +143,17 @@ async function exitsave() {
 
 async function externalConfigs() {
     let currentConfig;
-    let url = document.getElementById("external-url").value
+    let gistId = document.getElementById("external-url").value
+
+    const apiUrl = `https://api.github.com/gists/${gistId}`;
+    const response = await fetch(apiUrl);
+    const gistData = await response.json();
+
+    const files = gistData.files;
+    const url = Object.values(files)[0].raw_url;
     const rawconfig = await fetch(url);
     const configjson = await rawconfig.json();
-    configjson["url"] = url
+    configjson["url"] = gistId;
     await chrome.storage.sync.set(configjson);
     currentConfig = configjson;
     
@@ -151,6 +163,11 @@ async function externalConfigs() {
     currentStatConfig = currentConfig.stats;
 
 
+}
+
+async function reloadUrl() {
+    await externalConfigs().then(updateTable);
+    
 }
 
 function findStat(statsArray, statName) {

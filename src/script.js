@@ -99,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
             document.getElementById("table-content").innerHTML += outputhtml + (selectedConfig.showNotabilities ? notabilities : '') + "</tr>";
         }
+
+        let linkToIssue = document.getElementById("link-to-issue");
+        linkToIssue.innerHTML = `<a href="http://www.mwq.dds.nl/ns/results/${data}.html" target="_blank">Link to issue: ${data}</a>`;
+
     
     }
     
