@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>NStax Options</title>
-    <link href="../style.css" rel="stylesheet">
+    <script src="options.js"></script>
   </head>
   <body>
     <div id="maindiv">
@@ -17,6 +17,7 @@
             </tbody>
         </table>
     </div>
+    
     <select id="stat">
         <option value="" selected disabled hidden>Select stat to edit</option>
         <option value="Civil Rights">Civil Rights</option>
@@ -122,9 +123,12 @@
     <br>
     <button id="save">Save</button>
     <button id="exit">Exit</button>
+    <button id="exitsave">Save & Exit</button>
 
     <div id="status"></div>
 
-    <script src="options.js"></script>
+    <h3 style="font-size: 20px;">Use External configs:</h3>
+    <input type="text" id="external-url"/>
+    <input type="submit" id="external-submit" value="Save Url"/>
   </body>
 </html>

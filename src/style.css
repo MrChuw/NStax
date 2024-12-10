@@ -25,6 +25,15 @@ li {
     color: white;
 }
 
+#external-box {
+    display: flex;
+}
+
+#external-box p {
+    color: white;
+    font-size: 0.90rem;
+}
+
 #main-table {
     font-size: small;
     table-layout: fixed;

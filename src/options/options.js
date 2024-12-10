@@ -13,10 +13,12 @@ document.getElementById("add").addEventListener("click", add);
 document.getElementById("remove").addEventListener("click", remove);
 document.getElementById("save").addEventListener("click", save);
 document.getElementById("exit").addEventListener("click", exit);
+document.getElementById("exitsave").addEventListener("click", exitsave);
+document.getElementById("external-submit").addEventListener("click", externalConfigs)
 
 async function getConfig() {
     let currentConfig;
-    let storageconfig = await chrome.storage.sync.get(["stats", "showNotabilities"]);
+    let storageconfig = await chrome.storage.sync.get(["stats", "showNotabilities", "url"]);
     if (!storageconfig?.stats?.length) {
         const rawconfig = await fetch("../default.json");
         const configjson = await rawconfig.json();
@@ -24,6 +26,7 @@ async function getConfig() {
         currentConfig = configjson;
     }
     else currentConfig = storageconfig;
+    console.log(currentConfig);
 
     document.getElementById("shownotabilities").checked = currentConfig.showNotabilities;
     currentStatConfig = currentConfig.stats;
@@ -117,7 +120,37 @@ async function save() {
 
 async function exit() {
     let tab = await chrome.tabs.getCurrent();
-    chrome.tabs.remove(tab.id);
+    // Retorna para a aba anterior
+    chrome.tabs.update(tab.id, { url: tab.url });
+}
+
+async function exitsave() {
+    await chrome.storage.sync.set({ stats: currentStatConfig, showNotabilities: document.getElementById("shownotabilities").checked });
+    const status = document.getElementById('status');
+    status.textContent = 'Options saved.';
+    setTimeout(() => {
+        status.textContent = '';
+    }, 750);
+    let tab = await chrome.tabs.getCurrent();
+    // Retorna para a aba anterior
+    chrome.tabs.update(tab.id, { url: tab.url });
+}
+
+async function externalConfigs() {
+    let currentConfig;
+    let url = document.getElementById("external-url").value
+    const rawconfig = await fetch(url);
+    const configjson = await rawconfig.json();
+    configjson["url"] = url
+    await chrome.storage.sync.set(configjson);
+    currentConfig = configjson;
+    
+    console.log(currentConfig);
+
+    document.getElementById("shownotabilities").checked = currentConfig.showNotabilities;
+    currentStatConfig = currentConfig.stats;
+
+
 }
 
 function findStat(statsArray, statName) {

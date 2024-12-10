@@ -6,24 +6,28 @@
     "author": "callmepeterz",
     "icons": {
         "128": "img/icon128.png"
-      },
-    "action":{
-        "default_popup": "index.html",
+    },
+    "action": {
         "default_title": "NStax"
     },
-    "host_permissions":[
+    "host_permissions": [
         "https://www.nationstates.net/page=show_dilemma/dilemma=*",
         "http://www.mwq.dds.nl/*"
     ],
     "permissions": [
         "activeTab",
-        "storage"
+        "storage",
+        "tabs"
     ],
     "options_ui": {
         "page": "options/index.html"
     },
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self'"
+    },
+    "background": {
+        "scripts": ["background.js"],
+        "type": "module"
     },
     "browser_specific_settings": {
         "gecko": {
